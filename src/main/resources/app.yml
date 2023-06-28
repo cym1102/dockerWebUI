@@ -1,0 +1,41 @@
+server:
+  port: 7070
+  request:
+    maxBodySize: 20mb
+    maxFileSize: 2048mb
+    maxHeaderSize: 200kb
+  
+project:
+  sqlPrint: false
+  beanPackage: com.cym.model
+  home: /home/dockerWebUI/
+  findPass: false
+  
+solon:
+  app.name: dockerWebUI
+  view.mapping.html: FreemarkerRender
+  logging:
+    logger:
+      "io.undertow":
+        level: "WARN"
+      "org.xnio":
+        level: "WARN"
+      "o.xnio":
+        level: "WARN"
+      "com.zaxxer.hikari":
+        level: "WARN"
+      "org.jboss":
+        level: "WARN"
+    appender:
+      file:
+        name: ${project.home}/log/${solon.app.name}
+        level: INFO
+        maxFileSize: "100 MB"
+        maxHistory: "7"
+
+database:
+  type: h2
+  url: 
+  username: 
+  password: 
+  

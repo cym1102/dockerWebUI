@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#include "/adminPage/common.html"/>
+<style type="text/css">
+</style>
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+
+		<#include "/adminPage/header.html"/>
+		<#include "/adminPage/menu.html"/>
+		<!-- 内容主体区域 -->
+		<div class="layui-body">
+		<div style="padding: 15px">
+		
+			<fieldset class="layui-elem-field layui-field-title">
+				<legend>镜像管理</legend>
+			</fieldset>
+				
+			<form action="${ctx}/adminPage/image" id="searchForm" method="post">
+				<div class="layui-form">
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-sm" onclick="pull()">拉取镜像</button>
+					</div>
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-sm" onclick="openSearchImage()">查找镜像</button>
+					</div>
+					<div class="layui-inline">
+						<label class="layui-form-label">关键字</label>
+					</div>
+					<div class="layui-inline">
+						<input type="text" name="keywords" class="layui-input" style="height: 30px;" value="${keywords}">
+					</div>
+
+					<div class="layui-inline">
+						<button type="button" class="layui-btn layui-btn-sm" onclick="search()">搜索</button>
+					</div>
+
+				</div>
+
+			</form>
+
+			<table class="layui-table" lay-size="sm">
+				<thead>
+					<tr>
+						<th>名称</th>
+						<th>创建时间</th>
+						<th>尺寸</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#list list as imageExt>
+					<tr>
+						<td>${imageExt.imageName}</td>
+						<td>${(imageExt.created * 1000)?number_to_datetime?string('yyyy-MM-dd HH:mm:ss')}</td>
+						<td>${imageExt.size / 1024 /1024} mb</td>
+						<td>
+							<#if imageExt.soraImage==0>
+							<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${imageExt.id}')">删除</button>
+							</#if>
+							<#if imageExt.soraImage==1> 系统管理镜像 </#if>
+						</td>
+					</tr>
+					</#list>
+				</tbody>
+			</table>
+			</div>
+		</div>
+	</div>
+
+	<div style="height: 0px; width: 0px; overflow: hidden;">
+		<!-- 弹出框 -->
+		<div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
+			<form id="addForm">
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">
+						镜像名称
+						<span class="red">*</span>
+					</label>
+					<div class="layui-input-block">
+						<input type="text" name="name" id="name" class="layui-input">
+					</div>
+				</div>
+
+				<div class="layui-form-item" style="text-align: center;">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="pullOver()">拉取</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
+
+
+
+		<div class="layui-form" id="searchDiv" style="padding: 15px; display: none">
+			<div class="layui-form">
+				<div class="layui-inline">
+					<label class="layui-form-label">关键字</label>
+				</div>
+				<div class="layui-inline">
+					<input type="text" id="imageName" class="layui-input" style="height: 30px;">
+				</div>
+
+				<div class="layui-inline">
+					<button type="button" class="layui-btn layui-btn-sm" onclick="searchImage()">搜索</button>
+				</div>
+
+			</div>
+
+			<table class="layui-table" lay-size="sm">
+				<thead>
+					<tr>
+						<th>镜像来源</th>
+						<th>发行</th>
+						<th style="width: 50%;">描述</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="imageTable">
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script src="${ctx}/js/adminPage/image/index.js?v=${jsrandom}" type="text/javascript"></script>
+</body>
+
+
+</html>

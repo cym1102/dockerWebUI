@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<#include "/adminPage/common.html"/>
+<style type="text/css">
+h3{
+	font-weight: bolder;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	
+}
+</style>
+</head>
+<body class="layui-layout-body">
+	<div class="layui-layout layui-layout-admin">
+
+		<#include "/adminPage/header.html"/>
+		<#include "/adminPage/menu.html"/>
+
+		<div class="layui-body">
+			<!-- 内容主体区域 -->
+			<div style="padding: 15px">
+				<fieldset class="layui-elem-field layui-field-title">
+					<legend>关于</legend>
+				</fieldset>
+
+				<div class="layui-form-item">
+					<h3>dockerWebUI是什么</h3>
+					<div>
+						dockerWebUI是一款Linux环境下的docker容器可视化管理工具.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="${ctx}/js/adminPage/about/index.js?v=${jsrandom}" type="text/javascript"></script>
+</body>
+
+
+</html>
