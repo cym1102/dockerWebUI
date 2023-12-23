@@ -10,7 +10,6 @@ function search() {
 }
 
 
-
 function start(id) {
 	if (confirm("确认启动?")) {
 		var cmdId = guid();
@@ -78,6 +77,8 @@ function add() {
 
 	$("#portTable").html("");
 	$("#dirTable").html("");
+	$("#paramTable").html("");
+	$("#cmdTable").html("");
 
 	$("#env").val("");
 	$("#param").val("");
@@ -180,14 +181,25 @@ function buildDockerCmd() {
 
 		params.push({ paramName: paramName, paramValue: paramValue });
 	})
+	
+	var cmds = [];
+	$(".cmd").each(function() {
+		var cmdName = $(this).children("td").get(0).innerHTML;
+		var cmdValue = $(this).children("td").get(1).innerHTML;
+
+		cmds.push({ cmdName: cmdName, cmdValue: cmdValue });
+	})
 
 
-	var cmd = "docker run -itd --privileged=true --name=" + $("#name").val();
+	var cmd = "docker run -itd --name=" + $("#name").val();
 
-	if ($("autoStart").val()) {
+	if ($("#autoStart").prop("checked")) {
 		cmd += " --restart=on-failure:3";
 	}
-
+	if ($("#root").prop("checked")) {
+		cmd += " --privileged=true";
+	}
+	
 	for (let i = 0; i < ports.length; i++) {
 		cmd += " -p " + ports[i].localPort + ":" + ports[i].dockerPort;
 	}
@@ -196,6 +208,9 @@ function buildDockerCmd() {
 	}
 	for (let i = 0; i < params.length; i++) {
 		cmd += " -e " + params[i].paramName + "=\"" + params[i].paramValue + "\"";
+	}
+	for (let i = 0; i < cmds.length; i++) {
+		cmd += " --" + cmds[i].cmdName + "=" + cmds[i].cmdValue;
 
 	}
 
@@ -206,8 +221,9 @@ function buildDockerCmd() {
 		cmd += " --memory=" + $("#member").val() + "M";
 	}
 
+
 	cmd += " " + $("#image").val();
-	cmd += " " + $("#cmd").val();
+	cmd += " " + $("#command").val();
 
 
 	layer.prompt({
@@ -222,6 +238,20 @@ function buildDockerCmd() {
 		addOver(value);
 	});
 
+}
+
+function run(){
+	layer.prompt({
+		formType: 2,
+		value: "",
+		title: '执行命令',
+		area: ['400px', '300px'] //自定义文本域宽高
+	}, function(value, index, elem) {
+		//alert(value); //得到value
+		layer.close(index);
+		
+		addOver(value);
+	});
 }
 
 function del(id) {
@@ -278,20 +308,6 @@ function uninstall() {
 
 }
 
-/*
-function showImages() {
-	layer.open({
-		type: 2,
-		area: ['80%', '80%'], // 宽高
-		title: "查看本地镜像",
-		resize: false,
-		content: ctx + "/adminPage/docker/images",
-		cancel: function() {
-			location.reload();
-		}
-	});
-}
-*/
 
 function logs(id) {
 	var cmdId = guid();
@@ -372,7 +388,7 @@ function addParam() {
 	var paramName = $("#paramName").val();
 	var paramValue = $("#paramValue").val();
 
-	if (localDir == '' || dockerDir == '') {
+	if (paramName == '' || paramValue == '') {
 		layer.msg("参数未填写完整");
 		return;
 	}
@@ -391,8 +407,57 @@ function addParam() {
 	$("#paramValue").val("");
 }
 
+function addCmd() {
+	var cmdName = $("#cmdName").val();
+	var cmdValue = $("#cmdValue").val();
+
+	if (cmdName == '' || cmdValue == '') {
+		layer.msg("参数未填写完整");
+		return;
+	}
+
+	var id = guid();
+	var html = `
+		<tr id="${id}" class="cmd">
+			<td>${cmdName}</td>
+			<td>${cmdValue}</td>
+			<td><a href="javascript:delId('${id}')" class="red">删除</a></td>
+		</tr>
+	`;
+
+	$("#cmdTable").append(html);
+	$("#cmdName").val("");
+	$("#cmdValue").val("");
+}
 
 
 function delId(id) {
 	$("#" + id).remove();
+}
+
+var sshId = null;
+var sshIndex = null;
+function ssh(id){
+	sshId = id;
+	
+	sshIndex = layer.open({
+		type: 1,
+		area: ['400px', '300px;'], // 宽高
+		title: "终端命令",
+		resize: false,
+		content: $('#sshDiv')
+	});
+}
+
+function sshOver(){
+	layer.close(sshIndex);
+	
+	var cmd = $("#cmd").val();
+	layer.open({
+		type: 2,
+		area: ['80%', '80%'], // 宽高
+		title: "终端",
+		resize: false,
+		content: ctx + "/adminPage/ssh?id=" + sshId + "&cmd=" + encodeURIComponent(cmd)
+	});
 }

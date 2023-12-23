@@ -11,6 +11,9 @@ public class DockerWebUI {
 
 	public static void main(String[] args) {
 		Solon.start(DockerWebUI.class, args, app -> {
+			app.enableWebSocket(true);
+			app.enableWebSocketMvc(false);
+			
 			app.onError(e -> logger.error(e.getMessage(), e));
 
 			app.before(c -> {

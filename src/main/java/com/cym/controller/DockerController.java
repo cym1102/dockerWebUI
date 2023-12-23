@@ -34,11 +34,6 @@ public class DockerController extends BaseController {
 		for (ContainerExt containerExt : extList) {
 			containerExt.setNameStr(StrUtil.join(" ", containerExt.getNames()));
 			containerExt.setPortStr(StrUtil.join("<br>", containerExt.getPorts()));
-			if (containerExt.getNameStr().contains("sora.")) {
-				containerExt.setSoraContainer(1);
-			} else {
-				containerExt.setSoraContainer(0);
-			}
 
 			containerExt.setRun(containerExt.getStatus().contains("Exited") ? 0 : 1);
 		}

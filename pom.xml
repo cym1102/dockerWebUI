@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cym</groupId>
 	<artifactId>dockerWebUI</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.2</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>2.1.210</version>
+			<version>2.1.214</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -87,33 +87,41 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.odiszapc</groupId>
-			<artifactId>nginxparser</artifactId>
-			<version>0.9.6</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.noear</groupId>
 			<artifactId>nami</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.kodedu.pty4j</groupId>
+			<artifactId>pty4j</artifactId>
+			<version>0.7.4</version>
+		</dependency>
+
+		<!--
 		<dependency>
 			<groupId>org.noear</groupId>
 			<artifactId>solon.socketd.client.websocket</artifactId>
 		</dependency>
-
-		<!-- ssh连接工具 -->
+		
 		<dependency>
 			<groupId>com.jcraft</groupId>
 			<artifactId>jsch</artifactId>
 			<version>0.1.53</version>
 		</dependency>
-		<!--
+	
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 		</dependency>
 		 -->
 	</dependencies>
+
+    <repositories>
+        <repository>
+            <id>pty4j-releases</id>
+            <url>https://github.com/javaterminal/pty4j/raw/master/releases</url>
+        </repository>
+    </repositories>
 
 	<build>
 		<plugins>

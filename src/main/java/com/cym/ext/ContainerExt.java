@@ -13,7 +13,6 @@ public class ContainerExt {
 
 	private String nameStr;
 	private String portStr;
-	private Integer soraContainer;
 	private Integer run;
 	
 	/*--- 原始属性 --- */
@@ -123,13 +122,13 @@ public class ContainerExt {
 		return mounts;
 	}
 
-	public Integer getSoraContainer() {
-		return soraContainer;
-	}
-
-	public void setSoraContainer(Integer soraContainer) {
-		this.soraContainer = soraContainer;
-	}
+//	public Integer getSoraContainer() {
+//		return soraContainer;
+//	}
+//
+//	public void setSoraContainer(Integer soraContainer) {
+//		this.soraContainer = soraContainer;
+//	}
 
 	public String getNameStr() {
 		return nameStr;

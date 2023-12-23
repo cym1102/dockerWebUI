@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.cym.sqlhelper.utils.SqlHelper;
 import com.cym.utils.LinuxTools;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.ExecCreateCmdResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.api.model.SearchItem;
@@ -40,6 +41,7 @@ public class DockerService {
 		} else {
 			dockerClient = DockerClientBuilder.getInstance().build();
 		}
+		
 	}
 
 	public List<Container> searchContainer(String keywords) {
@@ -110,42 +112,40 @@ public class DockerService {
 	}
 
 	public void pullImageOver(String cmdId, String name) {
-		String cmd = "docker pull " + name;
-		cmdService.run(cmdId, cmd);
+		cmdService.run(cmdId, "docker pull " + name);
 	}
 
 	public void delImage(String id, String cmdId) {
-		String cmd = "docker rmi " + id;
-		cmdService.run(cmdId, cmd);
+		cmdService.run(cmdId, "docker rmi -f " + id);
 	}
 
 	public void logs(String id, String cmdId) {
 		cmdService.run(cmdId, "docker logs " + id);
 	}
 
-	public Integer getSoraImage(String imageName) {
-
-		String[] myImages = new String[] { //
-				"mysql:8.0.28"//
-				, "mysql:5.7.37"//
-				, "mysql:5.6.51"//
-				, "mysql:5.5.59"//
-				, "cym1102/nginx-modsecurity:latest"//
-				, "cym1102/php-fpm:5.6"//
-				, "cym1102/php-fpm:7.4"//
-				, "cym1102/php-fpm:8.1"//
-				, "tomcat:9.0-jre8-temurin" //
-				, "tomcat:9.0-jre11-temurin" //
-				, "tomcat:9.0-jre17-temurin" //
-		};
-		for (String myImage : myImages) {
-			if (imageName.startsWith(myImage)) {
-				return 1;
-			}
-		}
-
-		return 0;
-	}
+//	public Integer getSoraImage(String imageName) {
+//
+//		String[] myImages = new String[] { //
+//				"mysql:8.0.28"//
+//				, "mysql:5.7.37"//
+//				, "mysql:5.6.51"//
+//				, "mysql:5.5.59"//
+//				, "cym1102/nginx-modsecurity:latest"//
+//				, "cym1102/php-fpm:5.6"//
+//				, "cym1102/php-fpm:7.4"//
+//				, "cym1102/php-fpm:8.1"//
+//				, "tomcat:9.0-jre8-temurin" //
+//				, "tomcat:9.0-jre11-temurin" //
+//				, "tomcat:9.0-jre17-temurin" //
+//		};
+//		for (String myImage : myImages) {
+//			if (imageName.startsWith(myImage)) {
+//				return 1;
+//			}
+//		}
+//
+//		return 0;
+//	}
 
 //	public void installDocker(String cmdId) {
 //		if (LinuxTools.isApt()) {

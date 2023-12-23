@@ -1,6 +1,7 @@
 package com.cym.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.noear.solon.annotation.Controller;
@@ -33,8 +34,7 @@ public class ImageController extends BaseController {
 		List<ImageExt> extList = copyImageList(list);
 
 		for (ImageExt imageExt : extList) {
-			imageExt.setImageName(StrUtil.join(" ", imageExt.getRepoTags()));
-			imageExt.setSoraImage(dockerService.getSoraImage(imageExt.getImageName()));
+			imageExt.setImageName(StrUtil.join(" ", Arrays.asList(imageExt.getRepoTags())));
 		}
 
 		ModelAndView modelAndView = new ModelAndView("/adminPage/image/index.html");
@@ -66,9 +66,6 @@ public class ImageController extends BaseController {
 		return extList;
 	}
 
-	
-
-
 	@Mapping("pullOver")
 	public JsonResult pullImageOver(String cmdId, String name) {
 
@@ -96,7 +93,6 @@ public class ImageController extends BaseController {
 
 		return renderSuccess();
 	}
-
 
 	@Mapping("searchImage")
 	public JsonResult searchImage(String imageName) {

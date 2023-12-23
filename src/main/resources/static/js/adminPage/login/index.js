@@ -3,7 +3,7 @@ $(function() {
 		layer.open({
 			type: 1,
 			shade: false,
-			title: "登录全能神器",
+			title: "登录dockerWebUI",
 			closeBtn: false,
 			area: ['450px', '350px'], //宽高
 			content: $('#windowDiv')

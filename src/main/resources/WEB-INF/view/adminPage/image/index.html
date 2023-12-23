@@ -57,10 +57,8 @@
 						<td>${(imageExt.created * 1000)?number_to_datetime?string('yyyy-MM-dd HH:mm:ss')}</td>
 						<td>${imageExt.size / 1024 /1024} mb</td>
 						<td>
-							<#if imageExt.soraImage==0>
+							
 							<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${imageExt.id}')">删除</button>
-							</#if>
-							<#if imageExt.soraImage==1> 系统管理镜像 </#if>
 						</td>
 					</tr>
 					</#list>

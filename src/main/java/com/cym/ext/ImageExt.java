@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class ImageExt {
 	private String imageName;
-	private Integer soraImage;
+//	private Integer soraImage;
 	
 	/*--- 原始属性 --- */
 
@@ -114,13 +114,13 @@ public class ImageExt {
 		this.containers = containers;
 	}
 
-	public Integer getSoraImage() {
-		return soraImage;
-	}
-
-	public void setSoraImage(Integer soraImage) {
-		this.soraImage = soraImage;
-	}
+//	public Integer getSoraImage() {
+//		return soraImage;
+//	}
+//
+//	public void setSoraImage(Integer soraImage) {
+//		this.soraImage = soraImage;
+//	}
 
 	public String getImageName() {
 		return imageName;

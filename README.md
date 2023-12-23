@@ -48,7 +48,7 @@ yum install docker
 
 ```
 Linux:  mkdir /home/dockerWebUI/
-        wget -O /home/dockerWebUI/dockerWebUI.jar http://file.nginxwebui.cn/dockerWebUI-1.0.0.jar
+        wget -O /home/dockerWebUI/dockerWebUI.jar http://file.nginxwebui.cn/dockerWebUI-1.0.2.jar
 
 ```
 
@@ -118,11 +118,30 @@ systemctl start dockerwebui.service
 
 打开 http://ip:7070 进入主页
 
-![输入图片说明](http://www.nginxwebui.cn/img/svn/注册用户.png "login.jpg")
+![输入图片说明](http://www.nginxwebui.cn/img/docker/注册用户.png "login.jpg")
 
 首次打开页面, 需要注册管理员账户
 
-![输入图片说明](http://www.nginxwebui.cn/img/svn/登录界面.png "login.jpg")
+![输入图片说明](http://www.nginxwebui.cn/img/docker/登录界面.png "login.jpg")
+
+注册好管理员后, 可在此页面进行登录
+
+![输入图片说明](http://www.nginxwebui.cn/img/docker/系统状态.png "login.jpg")
+
+系统状态页面,可查看系统负载情况
+
+![输入图片说明](http://www.nginxwebui.cn/img/docker/镜像管理.png "login.jpg")
+
+镜像管理页面,可查看已拉取的镜像,可搜索镜像进行拉取
+
+![输入图片说明](http://www.nginxwebui.cn/img/docker/容器管理.png "login.jpg")
+
+容器管理页面,可查看已创建的容器,可使用图像界面创建容器,可查看容器日志等
+
+![输入图片说明](http://www.nginxwebui.cn/img/docker/用户管理.png "login.jpg")
+
+用户管理,可添加删除本系统的用户账号
+
 
 #### 找回密码
 

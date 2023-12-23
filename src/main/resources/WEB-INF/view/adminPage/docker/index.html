@@ -22,10 +22,15 @@
 				<form action="${ctx}/adminPage/docker" id="searchForm" method="post">
 
 					<div class="layui-form">
-						
+
 						<div class="layui-inline">
-							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick="add()">创建docker容器</button>
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick="add()">创建容器</button>
 						</div>
+
+						<div class="layui-inline">
+							<button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick="run()">直接执行命令</button>
+						</div>
+
 						<div class="layui-inline">
 							<label class="layui-form-label">关键字</label>
 						</div>
@@ -57,44 +62,41 @@
 						<#list list as containerExt>
 						<tr>
 							<td>
-								${containerExt.nameStr}<br>
+								${containerExt.nameStr}
+								<br>
 								${containerExt.id}
 							</td>
 							<td>${containerExt.image}</td>
 							<td>${containerExt.command}</td>
 							<td>${(containerExt.created * 1000)?number_to_datetime?string('yyyy-MM-dd HH:mm:ss')}</td>
 							<td>
-								<#if containerExt.run == 0> <span class="red">已停止 ${containerExt.status}</span> </#if>
-								<#if containerExt.run == 1> <span class="green">已启动 ${containerExt.status}</span> </#if>
+								<#if containerExt.run==0> <span class="red">已停止 ${containerExt.status}</span> </#if>
+								<#if containerExt.run==1> <span class="green">已启动 ${containerExt.status}</span> </#if>
 
 							</td>
+							<td>${containerExt.portStr}</td>
 							<td>
-								${containerExt.portStr}
-							</td>
-							<td>
-								<#if containerExt.soraContainer == 0>
-									<#if containerExt.run == 0>
-									<div class="layui-inline">
-										<button class="layui-btn layui-btn-normal layui-btn-sm" onclick="start('${containerExt.id}')">启动</button>
-									</div>
-									</#if>
-	
-									<#if containerExt.run == 1>
-									<div class="layui-inline">
-										<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="stop('${containerExt.id}')">停止</button>
-									</div>
-									</#if>
-									<div class="layui-inline">
-										<button class="layui-btn layui-btn-sm" onclick="logs('${containerExt.id}')">日志</button>
-									</div>
-									<div class="layui-inline">
-										<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${containerExt.id}')">删除</button>
-									</div>
+								<#if containerExt.run==0>
+								<div class="layui-inline">
+									<button class="layui-btn layui-btn-normal layui-btn-sm" onclick="start('${containerExt.id}')">启动</button>
+								</div>
 								</#if>
-								
-								<#if containerExt.soraContainer == 1>
-									系统管理容器
+
+								<#if containerExt.run==1>
+								<div class="layui-inline">
+									<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="stop('${containerExt.id}')">停止</button>
+								</div>
 								</#if>
+								<div class="layui-inline">
+									<button class="layui-btn layui-btn-sm" onclick="ssh('${containerExt.id}')">终端</button>
+								</div>
+								<div class="layui-inline">
+									<button class="layui-btn layui-btn-sm" onclick="logs('${containerExt.id}')">日志</button>
+								</div>
+								<div class="layui-inline">
+									<button class="layui-btn layui-btn-danger layui-btn-sm" onclick="del('${containerExt.id}')">删除</button>
+								</div>
+
 							</td>
 						</tr>
 						</#list>
@@ -201,7 +203,7 @@
 
 
 				<div class="layui-form-item">
-					<label class="layui-form-label"> 启动参数 </label>
+					<label class="layui-form-label"> 环境变量 </label>
 
 					<div class="layui-input-inline">
 						<input type="text" id="paramName" class="layui-input" placeholder="参数名">
@@ -233,6 +235,40 @@
 					</div>
 				</div>
 
+
+				<div class="layui-form-item">
+					<label class="layui-form-label"> 启动参数 </label>
+
+					<div class="layui-input-inline">
+						<input type="text" id="cmdName" class="layui-input" placeholder="参数名">
+					</div>
+
+					<div class="layui-input-inline">
+						<input type="text" id="cmdValue" class="layui-input" placeholder="参数值">
+					</div>
+					<button type="button" class="layui-btn" onclick="addCmd()">添加</button>
+				</div>
+
+
+				<div class="layui-form-item">
+					<label class="layui-form-label"> </label>
+
+					<div class="layui-input-block">
+						<table class="layui-table" lay-size="sm" style="width: 400px;">
+							<thead>
+								<tr>
+									<th>参数名</th>
+									<th>参数值</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="cmdTable">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
 				<div class="layui-form-item">
 					<label class="layui-form-label"> 内存配额</label>
 					<div class="layui-input-inline" style="width: 400px;">
@@ -250,7 +286,14 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label"> 执行命令 </label>
 					<div class="layui-input-inline" style="width: 400px;">
-						<input type="text" name="cmd" id="cmd" class="layui-input" placeholder="例: /bin/sh">
+						<input type="text" name="command" id="command" class="layui-input" placeholder="例: /bin/sh">
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label"> 特权模式 </label>
+					<div class="layui-input-inline">
+						<input type="checkbox" id="root" name="root" title="" lay-skin="primary">
 					</div>
 				</div>
 
@@ -261,6 +304,8 @@
 					</div>
 				</div>
 
+
+
 				<div class="layui-form-item" style="text-align: center;">
 					<button type="button" class="layui-btn layui-btn-normal" onclick="buildDockerCmd()">添加</button>
 					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
@@ -268,6 +313,26 @@
 			</form>
 		</div>
 
+
+		<div class="layui-form" id="sshDiv" style="padding: 15px; display: none">
+			<form id="sshForm">
+				<div class="layui-form-item">
+					<label class="layui-form-label">终端命令</label>
+					<div class="layui-input-block">
+						<select id="cmd" name="cmd">
+							<option>/bin/sh</option>
+							<option>/bin/bash</option>
+							<option>/bin/ash</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item center">
+					<button type="button" class="layui-btn layui-btn-normal" onclick="sshOver()">提交</button>
+					<button type="button" class="layui-btn" onclick="layer.closeAll()">关闭</button>
+				</div>
+			</form>
+		</div>
 	</div>
 
 	<script src="${ctx}/js/adminPage/docker/index.js?v=${jsrandom}" type="text/javascript"></script>
